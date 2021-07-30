@@ -19,6 +19,7 @@ namespace VR.Base
         [SerializeField] VRControllerLinkBase controllerLink;
         [SerializeField] Transform attachTransform;
         [SerializeField] VRManager vrManager;
+        public VRHandInteractor HandInteractor;
         [SerializeField] bool trackController = true;
         [SerializeField] bool trackInputs = true;
 
@@ -38,7 +39,6 @@ namespace VR.Base
         //public VRInteractableBase GrabInteractable { get { return grabInteractable; } set { grabInteractable = value; } }
         public bool TrackController { get { return trackController; } set { trackController = value; } }
         public bool TrackInputs { get { return trackInputs; } set { trackInputs = value; } }
-        //public VRHandInteractor HandInteractor { get; set;}
         #endregion
 
         #region Inputs
@@ -164,15 +164,12 @@ namespace VR.Base
         }
         private void UpdateEvents()
         {
-            if (TriggerButton && !lastTriggerButtonState) { onTriggerButtonTrue.Invoke(); lastTriggerButtonState = true; //HandInteractor?.OnTriggerPressed();
-            }
-            else if (!TriggerButton && lastTriggerButtonState) { onTriggerButtonFalse.Invoke(); lastTriggerButtonState = false; //HandInteractor?.OnTriggerReleased();
-            }
+            if (TriggerButton && !lastTriggerButtonState) { onTriggerButtonTrue.Invoke(); lastTriggerButtonState = true; HandInteractor?.OnTriggerPressed(); }
+            else if (!TriggerButton && lastTriggerButtonState) { onTriggerButtonFalse.Invoke(); lastTriggerButtonState = false; HandInteractor?.OnTriggerReleased(); }
 
-            if (GripButton && !lastGripButtonState) { onGripButtonTrue.Invoke(); lastGripButtonState = true; //HandInteractor?.OnGripPressed(); 
+            if (GripButton && !lastGripButtonState) { onGripButtonTrue.Invoke(); lastGripButtonState = true; HandInteractor?.OnGripPressed(); 
             }
-            else if (!GripButton && lastGripButtonState) { onGripButtonFalse.Invoke(); lastGripButtonState = false; //HandInteractor?.OnGripReleased(); 
-            }
+            else if (!GripButton && lastGripButtonState) { onGripButtonFalse.Invoke(); lastGripButtonState = false; HandInteractor?.OnGripReleased(); }
 
 
             if (FirstButton && !lastFirstButtonState) { onFirstButtonTrue.Invoke(); lastFirstButtonState = true; }

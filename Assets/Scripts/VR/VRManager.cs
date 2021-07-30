@@ -6,6 +6,8 @@ namespace VR.Base
 {
     public class VRManager : MonoBehaviour
     {
+
+        [SerializeField] protected LayerMask interactableLayerMask;
         [Header("---References---")]
         [SerializeField] VRController rightController;
         [SerializeField] VRController leftController;
@@ -13,7 +15,7 @@ namespace VR.Base
 
         //[SerializeField] Hand dominantHand = Hand.Right;
         //[SerializeField] float handToAttachPointVelocity = 5f;
-        //[SerializeField] float maxItemHover = 5f;
+        [SerializeField] float maxItemHover = 5f;
         [Header("ray attach parameters")]
         [SerializeField] float maxHoverRayDist = 5f;
         [SerializeField] float forceAttachOnRayDist = 0.2f;
@@ -47,12 +49,13 @@ namespace VR.Base
         //public Hand DominantHand { get { return dominantHand; } set { dominantHand = value; } }
         //public float HandToAttachPointVelocity { get { return handToAttachPointVelocity; } }
         //public List<VRInteractableBase> GrabbedInteractables { get { return grabbedInteractables; } }
+        public LayerMask InteractableLayerMask { get { return interactableLayerMask; } }
         public VRController RightController { get { return rightController; } }
         public VRController LeftController { get { return leftController; } }
         //public List<VRHandInteractor> HandInteractors { get { return handInteractors; } }
         public Transform Head { get { return head; } }
 
-        //public float MaxItemsHover { get { return maxItemHover; } }
+        public float MaxItemsHover { get { return maxItemHover; } }
         public float MaxHoverRayDist {  get { return maxHoverRayDist; } }
 
         public float ForceAttachOnRayDist {  get { return forceAttachOnRayDist; } }

@@ -5,6 +5,7 @@ using UnityEngine;
 namespace VR.Base
 {
     public enum Hand { Left, Right };
+    public enum TurnType { Smooth, Snap };
     public enum HoverType { Grip, Trigger};
     public struct JointValues
     {

@@ -9,8 +9,25 @@ namespace VR.Base {
     {
         [SerializeField] VRManager vRManager;
         [SerializeField] Transform IO;
-        [SerializeField] VRHand rightHand;
-        [SerializeField] VRHand leftHand;
+        [SerializeField] VRHandInteractor rightHand;
+        [SerializeField] VRHandInteractor leftHand;
+
+
+
+        [Header("---Turn Options---")]
+        [SerializeField] VRController turnController;
+        [SerializeField] TurnType turnType = TurnType.Snap;
+        [SerializeField] float turnAngle = 45;
+        [Tooltip("Deg per sec")]
+        [SerializeField] float turnSpeed = 270;
+        [SerializeField] float turnThresholdVal = 0.7f;
+
+        bool turned = false;
+        bool turning = false;
+        float desiredTurn = 0f;
+        float actTurn = 0f;
+
+        Vector3 virtualPos = Vector3.zero;
 
         ConfigurableJoint rightHandJoint;
         ConfigurableJoint leftHandJoint;
@@ -42,6 +59,8 @@ namespace VR.Base {
             HandJoitValues(rightHandJoint, vRManager.RightController);
             HandJoitValues(leftHandJoint, vRManager.LeftController);
             CenterIO();
+            TurnProcess();
+            
             CenterColliders();
         }
         void HandJoitValues(ConfigurableJoint _handJoint, VRController _controller)
@@ -57,16 +76,17 @@ namespace VR.Base {
             float angularDumper = vRManager.AngularDumper;
             float angularMaximumForce = vRManager.AngularMaximumForce;
 
-            //if (grabInteractable?.JointOvveride)
-            //{
-            //    positionSpring = grabInteractable.PositionSpringOverride;
-            //    positionDumper = grabInteractable.PositionDumperOverride;
-            //    maximumForce = grabInteractable.MaximumForceOverride;
+            VRInteractableBase grabInteractable = _controller.HandInteractor.GrabInteractable;
+            if (_controller.HandInteractor.GrabInteractable?.JointOvveride)
+            {
+                positionSpring = grabInteractable.PositionSpringOverride;
+                positionDumper = grabInteractable.PositionDumperOverride;
+                maximumForce = grabInteractable.MaximumForceOverride;
 
-            //    angularSpring = grabInteractable.AngularSpringOverride;
-            //    angularDumper = grabInteractable.AngularDumperOverride;
-            //    angularMaximumForce = grabInteractable.AngularMaximumForceOverride;
-            //}
+                angularSpring = grabInteractable.AngularSpringOverride;
+                angularDumper = grabInteractable.AngularDumperOverride;
+                angularMaximumForce = grabInteractable.AngularMaximumForceOverride;
+            }
 
             float positionDumperVal = vRManager.DumperSpeedToVelocity.Evaluate(_controller.Velocity.magnitude) * positionDumper;
             float angularDumperVal = vRManager.DumperAngularSpeedToAngularVelocity.Evaluate(_controller.AngularVelocity.magnitude) * angularDumper;
@@ -82,11 +102,11 @@ namespace VR.Base {
 
             MyFunctions.SetJointValues(jointValues);
         }
-        ConfigurableJoint SetHand(VRHand hand)
+        ConfigurableJoint SetHand(VRHandInteractor hand)
         {
             ConfigurableJoint joint = this.gameObject.AddComponent<ConfigurableJoint>();
             //Vector3 conectedAnchor;
-            VRHand handInteractor = hand.GetComponent<VRHand>();
+            VRHandInteractor handInteractor = hand.GetComponent<VRHandInteractor>();
 
             handInteractor.VRManager = vRManager;
             handInteractor.HandJoint = joint;
@@ -133,35 +153,96 @@ namespace VR.Base {
             //CenterBody(headPos);
             Centerhead(headPos);
         }
-        void CenterBody(Vector3 _headPos)
-        {
-            Vector3 headPos = _headPos;
+        //void CenterBody(Vector3 _headPos)
+        //{
+        //    Vector3 headPos = _headPos;
 
-            float headHeight = Mathf.Clamp(headPos.y, 0.5f, 2f);
-            bodyCollider.height = vRManager.BodyHeight;
+        //    float headHeight = Mathf.Clamp(headPos.y, 0.5f, 2f);
+        //    bodyCollider.height = vRManager.BodyHeight;
 
-            Vector3 newCenter = Vector3.zero;
+        //    Vector3 newCenter = Vector3.zero;
 
-            newCenter.y = headPos.y;
-            newCenter.y -= bodyCollider.height / 2;
+        //    newCenter.y = headPos.y;
+        //    newCenter.y -= bodyCollider.height / 2;
 
-            newCenter.x = headPos.x;
-            newCenter.z = headPos.z;
-            bodyCollider.center = newCenter;
-        }
+        //    newCenter.x = headPos.x;
+        //    newCenter.z = headPos.z;
+        //    bodyCollider.center = newCenter;
+        //}
         void Centerhead(Vector3 _headPos)
         {
             headCollider.center = _headPos;
         }
-        private Vector2 SpinePos()
+
+        private void TurnProcess()
         {
-            Vector3 right = Vector3.ProjectOnPlane(vRManager.Head.right, Vector3.up).normalized;
-            Vector3 back = Vector3.Cross(right, Vector3.up);
-            Vector3 spinePos = transform.InverseTransformDirection(back) * -0.2f;
-            spinePos = transform.InverseTransformPoint(vRManager.Head.position) + spinePos;
+            float joyStickXVal = turnController.JoyStickVal.x;
+            if (Mathf.Abs(joyStickXVal) > turnThresholdVal )
+            {
+                if (!turned && turnType == TurnType.Snap)
+                {
+                    if (joyStickXVal > 0)
+                    {
+                        if (!turning)
+                        {
+                            turning = true;
+                            desiredTurn = turnAngle;
+                        }
+                    }
+                    else
+                    {
+                        if (!turning)
+                        {
+                            turning = true;
+                            desiredTurn = -turnAngle;
+                        }
+                    }
+                    turned = true;
+                }
+                else if(turnType == TurnType.Smooth)
+                {
+                    SmoothTurn(joyStickXVal);
+                }
+            }
+            else if (Mathf.Abs(joyStickXVal) < turnThresholdVal)
+            {
+                turned = false;
+            }
 
-            return new Vector2(spinePos.x, spinePos.z);
+            if (turning && turnType == TurnType.Snap)
+            {
+                SmoothSnapTurn();
+            }
         }
+        void SmoothTurn(float _direction)
+        {
+            if (_direction > 0)
+            {
+                _direction = 1;
+            }
+            else
+            {
+                _direction = -1;
+            }
+            Vector3 prevPos = IO.localPosition;
+            float _turnAmount = turnSpeed * Time.deltaTime * _direction;
+            IO.transform.RotateAround(vRManager.Head.transform.position, Vector3.up, _turnAmount);
+            virtualPos = virtualPos + (IO.localPosition - prevPos);
+        }
+        private void SmoothSnapTurn()
+        {
+            Vector3 prevPos = IO.localPosition;
+            float _turnAmount = (desiredTurn / Mathf.Abs(desiredTurn)) * turnSpeed * Time.fixedDeltaTime;
+            IO.transform.RotateAround(vRManager.Head.transform.position, Vector3.up, _turnAmount);
+            virtualPos = virtualPos + (IO.localPosition - prevPos);
+            actTurn += _turnAmount;
 
+            if (Mathf.Abs(actTurn) >= Mathf.Abs(desiredTurn))
+            {
+                turning = false;
+                actTurn = 0;
+                desiredTurn = 0;
+            }
+        }
     } 
 }
