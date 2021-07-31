@@ -19,6 +19,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_0501e086bd964b998223aab7c6f34794:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - Texture2D_703668ae2f1a44e5892cc2b7af5797bf:
         m_Texture: {fileID: 2800000, guid: 40d44c8c976bc1848bcbb284b34de6c9, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -51,9 +55,9 @@ Material:
     - BOOLEAN_F4803020A146441489431268F72B5B56: 0
     - Vector1_20d959e3678c46869308a989b6127915: 5
     - Vector1_49a8dc9b9dae43928328c19f8226fb49: 0
-    - Vector1_6f37f09338694abb8f3dbec0bf9380aa: 1
+    - Vector1_6f37f09338694abb8f3dbec0bf9380aa: 1.5
     - Vector1_fd89c5e3744a4a90bb2294b65d5224e7: 0.22
-    - _CrackProggres: 0
+    - _CrackProggres: 0.63
     m_Colors:
-    - Color_6134846dd45847c7bfecdb03014efb14: {r: 0.26415092, g: 0.22330996, b: 0.19063722, a: 0}
+    - Color_6134846dd45847c7bfecdb03014efb14: {r: 0.6132076, g: 0.5794619, b: 0.5524653, a: 0}
   m_BuildTextureStacks: []

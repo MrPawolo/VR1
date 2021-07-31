@@ -40,6 +40,8 @@ namespace VR.Base
         [SerializeField] float bodyColliderRadious = 0.1f;
         [SerializeField] float bodyHeight = 0.9f;
         [SerializeField] float headRadious = 0.1f;
+
+        [SerializeField] Transform[] teleportTransforms;
         //[SerializeField] float footColliderRadious = 0.1f;
 
         List<VRInteractableBase> grabbedInteractables = new List<VRInteractableBase>();

@@ -14,14 +14,14 @@ namespace VR.Base
         [SerializeField] List<Collider> hoverColliders = new List<Collider>();
 
         protected bool hoverable = true;
-
+        List<VRHandInteractor> vRHandInteractors = new List<VRHandInteractor>();
 
         #region Accesors
         public bool MultipleGrab { get { return multipleGrab; } set { multipleGrab = value; } } 
         public float HoverWeight { get { return hoverWeight; } }
         public bool Hoverable { get { return hoverable; } set { hoverable = value; } }
         public bool Grabbed { get; set; }
-        public VRHandInteractor VRHandInteractor { get; set; }
+        public List<VRHandInteractor> VRHandInteractors { get { return vRHandInteractors; } set { vRHandInteractors = value; } }
         public InteractableJointOvverideValSO JointOvveride { get { return jointOvveride; } }
 
         public virtual float PositionSpringOverride { get { return jointOvveride.PositionSpring; } }
@@ -54,8 +54,34 @@ namespace VR.Base
         {
             DistanceHaptic();
         }
-
-
+        private void OnEnable()
+        {
+            if (VRHandInteractors.Count > 0)
+            {
+                foreach (VRHandInteractor interactor in VRHandInteractors)
+                {
+                    interactor.TryToDetach();
+                }
+            }
+        }
+        public void AddHandInteractor(VRHandInteractor interactor)
+        {
+            if (!VRHandInteractors.Contains(interactor))
+            {
+                VRHandInteractors.Add(interactor);
+            }
+        }
+        public void RemoveHandInteractor(VRHandInteractor interactor)
+        {
+            if (VRHandInteractors.Contains(interactor))
+            {
+                VRHandInteractors.Remove(interactor);
+            }
+        }
+        public void RemoveAllHandInteractors()
+        {
+            VRHandInteractors.Clear();
+        }
         public virtual void OnHoverEnter(VRHandInteractor handInteractor)
         {
             //GetAttachTransform(handInteractor);
@@ -105,27 +131,36 @@ namespace VR.Base
         }
         private void OnCollisionEnter(Collision collision)
         {
-            if (!VRHandInteractor) return;
-            if (myRb.isKinematic) return;
-            float hitVelSqr = collision.relativeVelocity.magnitude;
-            float haptic = VRManager.OnCollisionHaptic.Evaluate(hitVelSqr);
-            VRHandInteractor.Controller.SendHapticImpulse(0.1f, haptic);
+            if (VRHandInteractors.Count == 0) { return; }
+            if (myRb.isKinematic) {return; }
+            foreach (VRHandInteractor interactor in VRHandInteractors)
+            {
+                float hitVelSqr = collision.relativeVelocity.magnitude;
+                float haptic = VRManager.OnCollisionHaptic.Evaluate(hitVelSqr);
+                interactor.Controller.SendHapticImpulse(0.1f, haptic);
+            }
         }
         private void OnCollisionStay(Collision collision)
         {
-            if (!VRHandInteractor) return;
-            if (myRb.isKinematic) return;
-            float distSqr = (VRHandInteractor.Controller.transform.position - this.transform.position).magnitude;
-            float haptic = VRManager.HandDistanceHapticAmount.Evaluate(distSqr);
-            VRHandInteractor.Controller.SendHapticImpulse(0.1f, haptic);
+            if (VRHandInteractors.Count == 0) { return; }
+            if (myRb.isKinematic) { return; }
+            foreach (VRHandInteractor interactor in VRHandInteractors)
+            {
+                float distSqr = (interactor.Controller.transform.position - interactor.transform.position).magnitude;
+                float haptic = VRManager.HandDistanceHapticAmount.Evaluate(distSqr);
+                interactor.Controller.SendHapticImpulse(0.1f, haptic);
+            }
         }
         void DistanceHaptic()
         {
-            if (!VRHandInteractor) return;
-            if (!myRb.isKinematic) return;
-            float distSqr = (VRHandInteractor.Controller.transform.position - this.transform.position).magnitude;
-            float haptic = VRManager.HandDistanceHapticAmount.Evaluate(distSqr);
-            VRHandInteractor.Controller.SendHapticImpulse(0.1f, haptic);
+            if (VRHandInteractors.Count == 0) { return; }
+            if (!myRb.isKinematic) { return; }
+            foreach (VRHandInteractor interactor in VRHandInteractors)
+            {
+                float distSqr = (interactor.Controller.transform.position - interactor.transform.position).magnitude;
+                float haptic = VRManager.HandDistanceHapticAmount.Evaluate(distSqr);
+                interactor.Controller.SendHapticImpulse(0.1f, haptic);
+            }
         }
     }
 }

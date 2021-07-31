@@ -18,9 +18,9 @@ public class DamageDealer : MonoBehaviour
         {
             VRInteractableBase interactableBase = GetComponent<VRInteractableBase>(); //not very efficient
             float velocity = myRb.velocity.magnitude;
-            if (interactableBase && interactableBase.VRHandInteractor)
+            if (interactableBase && interactableBase.VRHandInteractors.Count == 1)
             {
-                velocity = interactableBase.VRHandInteractor.AvgVelocity;
+                velocity = interactableBase.VRHandInteractors[0].AvgVelocity;
             }
             float mass = myRb.mass;
 

@@ -9,6 +9,8 @@ namespace VR.Base
     {
         [SerializeField] float interiaTensor = 0.003f;
         public VRController Controller;
+        public Animator handAnimator;
+        [Range(0,1)] public float minHandColsedVal = 0.1f;
 
         public UnityEvent onHoverEnter;
         public UnityEvent onHoverExit;
@@ -43,6 +45,8 @@ namespace VR.Base
         public List<VRInteractableBase> HoveredObjects = new List<VRInteractableBase>();
         Rigidbody myRb;
         IEnumerator attachingCorutine;
+
+        readonly int GRIP_ID = Animator.StringToHash("Grip");
         public void Awake()
         {
             myRb = GetComponent<Rigidbody>();
@@ -59,6 +63,19 @@ namespace VR.Base
                 }
             }
             AvgVelocity = MyFunctions.HandleAvgVelocity(ref velocities, myRb.velocity.magnitude);
+            HandleAnimation();
+        }
+        void HandleAnimation()
+        {
+            if (!handAnimator) return;
+            if (grabInteractable)
+            {
+                handAnimator.SetFloat(GRIP_ID, 1);
+            }
+            else
+            {
+                handAnimator.SetFloat(GRIP_ID, Mathf.Lerp(minHandColsedVal, 1f, Mathf.SmoothStep(0,1,Controller.GripVal)) );
+            }
         }
         VRInteractableBase Calculate(VRInteractableBase _tempInteractable, List<VRInteractableBase> _hoveredObjects)
         {
@@ -205,7 +222,7 @@ namespace VR.Base
             ConfigureJoint();
             VRManager.AddGrabbedInteractable(grabInteractable);
 
-            _grabInteractable.VRHandInteractor = this; //TODO: Trzeba sprawdziæ czy to musi byæ w tym miejscu, prawdopodobnie lepiej bedzie jak bêdzie dodana rêka po animacji do³¹czania
+            _grabInteractable.AddHandInteractor(this); //TODO: Trzeba sprawdziæ czy to musi byæ w tym miejscu, prawdopodobnie lepiej bedzie jak bêdzie dodana rêka po animacji do³¹czania
             _grabInteractable.OnAttachEnd(this);
             Controller.OnAttach();
             onAttach?.Invoke();
@@ -247,7 +264,7 @@ namespace VR.Base
                 {
                     Destroy(myJoint);
                 }
-                grabInteractable.VRHandInteractor = null;
+                grabInteractable.RemoveHandInteractor(this);
                 grabInteractable.OnDetach(this);
                 VRManager.RemoveGrabbedInteractable(grabInteractable);
 
