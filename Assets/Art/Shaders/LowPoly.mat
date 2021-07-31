@@ -46,7 +46,8 @@ Material:
     m_Floats:
     - BOOLEAN_F4803020A146441489431268F72B5B56: 0
     - Vector1_20c0b3500afe40b19e41c5743e50c721: 0
-    - Vector1_54736adf68b642a6ab3bc83264218b33: 0
+    - Vector1_54736adf68b642a6ab3bc83264218b33: 0.387
     - Vector1_e55fdff61fb844d1b9fcbef51ed1062a: 5
-    m_Colors: []
+    m_Colors:
+    - Color_868e4aceffec434fa1cefebca497cacd: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 0}
   m_BuildTextureStacks: []
