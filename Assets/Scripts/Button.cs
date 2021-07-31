@@ -39,11 +39,11 @@ public class Button : MonoBehaviour
     void ButtonWasPressed()
     {
         pressed = true;
-        onButtonPressed?.Invoke();
         if (pressSound)
         {
             AudioSource.PlayClipAtPoint(pressSound, this.transform.position, StaticConfig.buttonPressVolume);
         }
+        onButtonPressed?.Invoke();
     }
     void ButtonWasReleased()
     {
