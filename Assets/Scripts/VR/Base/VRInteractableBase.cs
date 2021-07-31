@@ -51,6 +51,13 @@ namespace VR.Base
         public UnityEvent onTriggerFalse;
         #endregion
 
+        public void OnValidate()
+        {
+            if (!onCollision)
+            {
+                onCollision = GetComponent<OnCollisionHit>();
+            }
+        }
         public void OnUpdate(float _deltaTime)
         {
 
