@@ -31,10 +31,12 @@ namespace VR.Base
 
         public VRManager VRManager { get; set; }
         public ConfigurableJoint HandJoint { get; set; }
+        public HandDistanceHaptic HandDistanceHaptic { get; set; }
         public VRInteractableBase GrabInteractable {  get { return grabInteractable; } }
         public Collider[] handColliders;
-        
 
+        public float AvgVelocity { get; set; }
+        float[] velocities = new float[3];
         protected ConfigurableJoint myJoint;
         protected VRInteractableBase grabInteractable;
         private VRInteractableBase tempInteractable;
@@ -45,6 +47,7 @@ namespace VR.Base
         {
             myRb = GetComponent<Rigidbody>();
             myRb.inertiaTensor = interiaTensor * Vector3.one;
+            HandDistanceHaptic = GetComponent<HandDistanceHaptic>();
         }
         private void FixedUpdate()
         {
@@ -55,6 +58,7 @@ namespace VR.Base
                     tempInteractable = Calculate(tempInteractable, HoveredObjects);
                 }
             }
+            AvgVelocity = MyFunctions.HandleAvgVelocity(ref velocities, myRb.velocity.magnitude);
         }
         VRInteractableBase Calculate(VRInteractableBase _tempInteractable, List<VRInteractableBase> _hoveredObjects)
         {
@@ -199,6 +203,7 @@ namespace VR.Base
             }*/
 
             ConfigureJoint();
+            VRManager.AddGrabbedInteractable(grabInteractable);
 
             _grabInteractable.VRHandInteractor = this; //TODO: Trzeba sprawdziæ czy to musi byæ w tym miejscu, prawdopodobnie lepiej bedzie jak bêdzie dodana rêka po animacji do³¹czania
             _grabInteractable.OnAttachEnd(this);
@@ -244,6 +249,7 @@ namespace VR.Base
                 }
                 grabInteractable.VRHandInteractor = null;
                 grabInteractable.OnDetach(this);
+                VRManager.RemoveGrabbedInteractable(grabInteractable);
 
                 Controller.OnDetach();
                 onDetach?.Invoke();

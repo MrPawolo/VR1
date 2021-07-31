@@ -145,7 +145,7 @@ namespace VR.Base {
         }
         void CenterIO() //Camera and controller's parent
         {
-            IO.transform.position = transform.position;
+            IO.transform.position = transform.position + virtualPos;
         }
         void CenterColliders()
         {

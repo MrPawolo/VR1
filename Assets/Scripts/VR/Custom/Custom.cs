@@ -19,6 +19,25 @@ namespace VR.Base
     }
     public struct MyFunctions
     {
+        public static float CalculateDMG(float velocity, float mass)
+        {
+            return (mass * velocity * velocity) / 2;
+        }
+        public static float[] AddTo3Velocities(float[] vel, float newVel)
+        {
+            float[] returnVel = { vel[1], vel[2], newVel };
+            return returnVel;
+        }
+        public static float HandleAvgVelocity(ref float[] vel, float newVel)
+        {
+            vel = MyFunctions.AddTo3Velocities(vel, newVel);
+            float addVel = 0;
+            for (int i = 0; i < vel.Length; i++)
+            {
+                addVel += vel[i];
+            }
+            return addVel / 3;
+        }
         public static ConfigurableJoint SetJointValues(JointValues _jointValues)
         {
             JointDrive _jointDrive = new JointDrive();

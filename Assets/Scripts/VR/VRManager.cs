@@ -32,8 +32,8 @@ namespace VR.Base
         [SerializeField] float angularMaximumForce = 30f;
         //[SerializeField] float armLenght = 0.8f;
         //[SerializeField] float armLenghtSlope = 50;
-        //[SerializeField] AnimationCurve handDistanceHapticAmount;
-        //[SerializeField] AnimationCurve onCollisionHaptic;
+        [SerializeField] AnimationCurve handDistanceHapticAmount;
+        [SerializeField] AnimationCurve onCollisionHaptic;
 
         [Header("Body Collider variables")]
         //[SerializeField] float headColliderRadious = 0.15f;
@@ -42,13 +42,13 @@ namespace VR.Base
         [SerializeField] float headRadious = 0.1f;
         //[SerializeField] float footColliderRadious = 0.1f;
 
-        //List<VRInteractableBase> grabbedInteractables = new List<VRInteractableBase>();
+        List<VRInteractableBase> grabbedInteractables = new List<VRInteractableBase>();
         //List<VRHandInteractor> handInteractors = new List<VRHandInteractor>();
 
         #region Accesors
         //public Hand DominantHand { get { return dominantHand; } set { dominantHand = value; } }
         //public float HandToAttachPointVelocity { get { return handToAttachPointVelocity; } }
-        //public List<VRInteractableBase> GrabbedInteractables { get { return grabbedInteractables; } }
+        public List<VRInteractableBase> GrabbedInteractables { get { return grabbedInteractables; } }
         public LayerMask InteractableLayerMask { get { return interactableLayerMask; } }
         public VRController RightController { get { return rightController; } }
         public VRController LeftController { get { return leftController; } }
@@ -74,8 +74,8 @@ namespace VR.Base
         public float AngularMaximumForce { get { return angularMaximumForce; } }
         //public float ArmLenght {  get { return armLenght; } set { armLenght = value; } }
         //public float ArmLenghtSlope {  get { return armLenghtSlope; } }
-        //public AnimationCurve HandDistanceHapticAmount {  get { return handDistanceHapticAmount; } }
-        //public AnimationCurve OnCollisionHaptic { get { return onCollisionHaptic; } }
+        public AnimationCurve HandDistanceHapticAmount {  get { return handDistanceHapticAmount; } }
+        public AnimationCurve OnCollisionHaptic { get { return onCollisionHaptic; } }
 
 
         //--------------body variables -------------
@@ -89,41 +89,56 @@ namespace VR.Base
 
         private void FixedUpdate()
         {
-            //VRInteractableBase grabbed = null;
-            //for (int i = 0; i < GrabbedInteractables.Count; i++)
-            //{
-            //    if (grabbed != GrabbedInteractables[i])
-            //    {
-            //        grabbed = GrabbedInteractables[i];
-            //        grabbed.OnFixedUpdate(Time.deltaTime);
-            //    }
-            //}
+            VRInteractableBase grabbed = null;
+            for (int i = 0; i < GrabbedInteractables.Count; i++)
+            {
+                if (grabbed != GrabbedInteractables[i])
+                {
+                    grabbed = GrabbedInteractables[i];
+                    grabbed.OnFixedUpdate(Time.deltaTime);
+                }
+            }
         }
         private void Update()
         {
-            //VRInteractableBase grabbed = null;
-            //for (int i = 0; i < GrabbedInteractables.Count; i++)
-            //{
-            //    if (grabbed != GrabbedInteractables[i])
-            //    {
-            //        grabbed = GrabbedInteractables[i];
-            //        grabbed.OnUpdate(Time.deltaTime);
-            //    }
-            //}
+            VRInteractableBase grabbed = null;
+            for (int i = 0; i < GrabbedInteractables.Count; i++)
+            {
+                if (grabbed != GrabbedInteractables[i])
+                {
+                    grabbed = GrabbedInteractables[i];
+                    grabbed.OnUpdate(Time.deltaTime);
+                }
+            }
         }
 
-        //public void AddGrabbedInteractable(VRInteractableBase _interactable)
-        //{
-        //    grabbedInteractables.Add(_interactable);
-        //}
-        //public void RemoveGrabbedInteractable(VRInteractableBase _interactable)
-        //{
-        //    if (GrabbedInteractables.Count == 0)
-        //    {
-        //        return;
-        //    }
-        //    grabbedInteractables.Remove(_interactable);
-        //}
+        public void AddGrabbedInteractable(VRInteractableBase _interactable)
+        {
+            foreach(VRInteractableBase interactable in grabbedInteractables)
+            {
+                if(interactable == _interactable)
+                {
+                    return;
+                }
+            }
+            grabbedInteractables.Add(_interactable);
+        }
+        public void RemoveGrabbedInteractable(VRInteractableBase _interactable)
+        {
+            if (GrabbedInteractables.Count == 0)
+            {
+                return;
+            }
+            foreach (VRInteractableBase interactable in grabbedInteractables)
+            {
+                if (interactable == _interactable)
+                {
+                    grabbedInteractables.Remove(_interactable);
+                    return;
+                }
+            }
+            
+        }
         //public void AddHandInteractor(VRHandInteractor _handInteracor)
         //{
         //    handInteractors.Add(_handInteracor);
