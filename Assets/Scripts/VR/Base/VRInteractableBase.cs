@@ -12,6 +12,7 @@ namespace VR.Base
         [SerializeField] protected InteractableJointOvverideValSO jointOvveride;
         [SerializeField] bool multipleGrab = true;
         [SerializeField] List<Collider> hoverColliders = new List<Collider>();
+        [SerializeField] Collider[] collisionColliders;
 
         protected bool hoverable = true;
         List<VRHandInteractor> vRHandInteractors = new List<VRHandInteractor>();
@@ -30,8 +31,9 @@ namespace VR.Base
         public virtual float AngularSpringOverride { get { return jointOvveride.AngularSpring; } }
         public virtual float AngularDumperOverride { get { return jointOvveride.AngularDumper; } }
         public virtual float AngularMaximumForceOverride { get { return jointOvveride.AngularMaximumForce; } }
-
+        public Rigidbody MyRb { get { return myRb; } }
         public VRManager VRManager { get; set; }
+        public Collider[] CollisionColliders { get { return collisionColliders; } }
 
         Rigidbody myRb;
         #endregion

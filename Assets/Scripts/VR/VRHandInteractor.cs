@@ -271,6 +271,10 @@ namespace VR.Base
                 Controller.OnDetach();
                 onDetach?.Invoke();
                 //VRManager.CheckInteractablesIfHaveLeftHandOnly();//TODO: To powinno byæ sprawdzane na obiekcie
+                if (!grabInteractable.MyRb.isKinematic)
+                {
+                    StartCoroutine(IgnoreCollisionForTime(grabInteractable.CollisionColliders));
+                }
                 grabInteractable.Grabbed = false;
                 grabInteractable.Hoverable = true;
                 grabInteractable = null;
@@ -295,6 +299,23 @@ namespace VR.Base
             }
         }
 
+        IEnumerator IgnoreCollisionForTime(Collider[] colliders)
+        {
+            IgnoreCollision(colliders, true);
+            yield return new WaitForSeconds(0.2f);
+            IgnoreCollision(colliders, false);
+        }
+
+        private void IgnoreCollision(Collider[] colliders, bool state)
+        {
+            foreach (Collider collider in colliders)
+            {
+                foreach (Collider myCollider in handColliders)
+                {
+                    Physics.IgnoreCollision(myCollider, collider, state);
+                }
+            }
+        }
         public virtual void OnTriggerEntered(Collider _other)
         {
             if (GrabInteractable)
