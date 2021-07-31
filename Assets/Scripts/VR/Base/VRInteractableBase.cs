@@ -14,6 +14,8 @@ namespace VR.Base
         [SerializeField] List<Collider> hoverColliders = new List<Collider>();
         [SerializeField] Collider[] collisionColliders;
 
+
+
         protected bool hoverable = true;
         List<VRHandInteractor> vRHandInteractors = new List<VRHandInteractor>();
 
@@ -35,6 +37,7 @@ namespace VR.Base
         public VRManager VRManager { get; set; }
         public Collider[] CollisionColliders { get { return collisionColliders; } }
 
+        OnCollisionHit onCollision;
         Rigidbody myRb;
         #endregion
 
@@ -140,6 +143,10 @@ namespace VR.Base
                 float hitVelSqr = collision.relativeVelocity.magnitude;
                 float haptic = VRManager.OnCollisionHaptic.Evaluate(hitVelSqr);
                 interactor.Controller.SendHapticImpulse(0.1f, haptic);
+                if (onCollision)
+                {
+                    onCollision.OnCollision(haptic);
+                }
             }
         }
         private void OnCollisionStay(Collision collision)

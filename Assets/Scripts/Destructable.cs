@@ -31,6 +31,7 @@ public class Destructable : MonoBehaviour, IDamage
         if (actHealth < 0)
         {
             OnObjDestroy?.Invoke();
+            HighScoreManager.AddToHighScore(pointsForDestruction);
             return;
         }
         HandleLevelOfDestroy();
