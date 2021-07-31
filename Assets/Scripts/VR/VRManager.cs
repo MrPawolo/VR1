@@ -141,6 +141,13 @@ namespace VR.Base
             }
             
         }
+        public void TeleportTo(Vector3 worldPos)
+        {
+            foreach(Transform transform in teleportTransforms)
+            {
+                transform.position = worldPos;
+            }
+        }
         //public void AddHandInteractor(VRHandInteractor _handInteracor)
         //{
         //    handInteractors.Add(_handInteracor);

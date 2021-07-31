@@ -16,6 +16,7 @@ public class Destructable : MonoBehaviour, IDamage
     public UnityEvent OnObjDestroy;
     MeshRenderer meshRenderer;
     [SerializeField] float actHealth;
+    bool destroyed;
     void Start()
     {
         actHealth = maxHealth;
@@ -27,10 +28,13 @@ public class Destructable : MonoBehaviour, IDamage
     }
     public void Damage(float velocity, float mass)
     {
+        if (destroyed) return;
         actHealth -= MyFunctions.CalculateDMG(velocity, mass);
         if (actHealth < 0)
         {
             OnObjDestroy?.Invoke();
+            destroyed = true;
+            HighScoreManager.AddToHighScore(pointsForDestruction);
             return;
         }
         HandleLevelOfDestroy();

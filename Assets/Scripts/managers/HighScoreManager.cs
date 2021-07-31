@@ -38,9 +38,10 @@ public class HighScoreManager : MonoBehaviour
     private void OnDisable()
     {
         float lastHighScore = PlayerPrefsHandler.GetFloat(HIGH_SCORE);
-        if(lastHighScore < actScore)
+        if (lastHighScore < actScore)
         {
             PlayerPrefsHandler.SetFloat(HIGH_SCORE, actScore);
         }
+        actScore = 0;
     }
 }

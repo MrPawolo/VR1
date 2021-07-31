@@ -8,16 +8,23 @@ namespace VR.Base
     {
         VRController controller;
         VRManager VRManager;
+        OnCollisionHit onCollisionHit;
+
         private void Start()
         {
             controller = GetComponent<VRHandInteractor>().Controller;
             VRManager = GetComponent<VRHandInteractor>().VRManager;
+            onCollisionHit = GetComponent<OnCollisionHit>();
         }
         public void OnCollisionEntered(Collision collision)
         {
             float hitVelSqr = collision.relativeVelocity.magnitude;
             float haptic = VRManager.OnCollisionHaptic.Evaluate(hitVelSqr);
             controller.SendHapticImpulse(0.1f, haptic);
+            if (onCollisionHit)
+            {
+                onCollisionHit.OnCollision(haptic);
+            }
         }
         public void OnCollisionStayed(Collision collision)
         {

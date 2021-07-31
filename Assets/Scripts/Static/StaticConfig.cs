@@ -6,4 +6,7 @@ public class StaticConfig
     public static float buttonReleaseVolume = 0.4f;
     public static string CrackProggres = "_CrackProggres";
     public static float destroyTime = 10f;
+    public static float onCollisionHitVolumeMultiplier = 1f;
+    public static float onDestroyForce = 2f;
+    public static float hitCoolDown = 0.2f;
 }
