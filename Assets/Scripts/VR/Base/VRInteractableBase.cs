@@ -56,7 +56,7 @@ namespace VR.Base
         {
             DistanceHaptic();
         }
-        private void OnEnable()
+        public void OnDisable()
         {
             if (VRHandInteractors.Count > 0)
             {

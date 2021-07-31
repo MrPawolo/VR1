@@ -248,6 +248,7 @@ namespace VR.Base
             myJoint.yMotion = ConfigurableJointMotion.Locked;
             myJoint.zMotion = ConfigurableJointMotion.Locked;
         }
+        [ContextMenu("ManualDetach")]
         public virtual void TryToDetach()
         {
             if (grabInteractable)
