@@ -108,8 +108,9 @@ Material:
     - BOOLEAN_F4803020A146441489431268F72B5B56: 1
     - Vector1_20c0b3500afe40b19e41c5743e50c721: 0.05
     - Vector1_54736adf68b642a6ab3bc83264218b33: 0.5
-    - Vector1_e55fdff61fb844d1b9fcbef51ed1062a: 2.83
-    - Vector1_ec7b9f8c872a49b7b494f28e30f24a86: 0.87
+    - Vector1_c31a64083c23415fba4beec9c00e2871: 0.19
+    - Vector1_e55fdff61fb844d1b9fcbef51ed1062a: 0.12
+    - Vector1_ec7b9f8c872a49b7b494f28e30f24a86: 3.74
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1

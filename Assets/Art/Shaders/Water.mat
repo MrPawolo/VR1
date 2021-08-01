@@ -11,7 +11,7 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: dee5bfdd1a2476744a97d0ec892c45c5, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -39,11 +39,11 @@ Material:
     - Boolean_B3888B6B: 0
     - Vector1_15D241D8: -0.22
     - Vector1_3D7ABF0B: 0.03
-    - Vector1_4CE5DBB: 16.41
-    - Vector1_660F2B28: 1.23
+    - Vector1_4CE5DBB: 5.11
+    - Vector1_660F2B28: 1.05
     - Vector1_689CFA08: 2.12
     - Vector1_6CE86BC5: 0
-    - Vector1_768CA144: -0.41
+    - Vector1_768CA144: -0.24
     - Vector1_A24A7CAE: 1
     - Vector1_BA3DFEB6: 0.1
     - Vector1_C6999099: 0.68
@@ -55,5 +55,5 @@ Material:
     - Color_58E84493: {r: 0.254717, g: 0.2464326, b: 0.22467962, a: 0}
     - Color_8E266D6D: {r: 0.16580626, g: 0.26502526, b: 0.509434, a: 0}
     - Color_B8EC49D9: {r: 0.5536223, g: 0.737426, b: 0.8207547, a: 0}
-    - Color_D84B05E: {r: 0.28515473, g: 0.4985783, b: 0.6792453, a: 0}
+    - Color_D84B05E: {r: 0.21626917, g: 0.38110563, b: 0.5660378, a: 0}
   m_BuildTextureStacks: []

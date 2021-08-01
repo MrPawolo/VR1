@@ -303,7 +303,7 @@ namespace VR.Base
         IEnumerator IgnoreCollisionForTime(Collider[] colliders)
         {
             IgnoreCollision(colliders, true);
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.8f);
             IgnoreCollision(colliders, false);
         }
 

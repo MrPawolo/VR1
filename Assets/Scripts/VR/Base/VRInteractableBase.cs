@@ -53,7 +53,14 @@ namespace VR.Base
 
         public void OnValidate()
         {
-            if (!onCollision)
+            if (onCollision == null)
+            {
+                onCollision = GetComponent<OnCollisionHit>();
+            }
+        }
+        public void Start()
+        {
+            if (onCollision == null)
             {
                 onCollision = GetComponent<OnCollisionHit>();
             }
@@ -143,6 +150,10 @@ namespace VR.Base
         }
         private void OnCollisionEnter(Collision collision)
         {
+            if (onCollision != null)
+            {
+                onCollision.OnCollision(Mathf.SmoothStep(2,20, collision.relativeVelocity.magnitude), collision);
+            }
             if (VRHandInteractors.Count == 0) { return; }
             if (myRb.isKinematic) {return; }
             foreach (VRHandInteractor interactor in VRHandInteractors)
@@ -150,10 +161,7 @@ namespace VR.Base
                 float hitVelSqr = collision.relativeVelocity.magnitude;
                 float haptic = VRManager.OnCollisionHaptic.Evaluate(hitVelSqr);
                 interactor.Controller.SendHapticImpulse(0.1f, haptic);
-                if (onCollision)
-                {
-                    onCollision.OnCollision(haptic,collision);
-                }
+                
             }
         }
         private void OnCollisionStay(Collision collision)
