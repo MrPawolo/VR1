@@ -38,6 +38,11 @@ namespace VR.Base
             }
             return addVel / 3;
         }
+        public static float SmoothStep(float t1, float t2, float x)
+        {
+            return Mathf.Max(0f, Mathf.Min(1f, (x - t1) / (t2 - t1)));
+        }
+
         public static ConfigurableJoint SetJointValues(JointValues _jointValues)
         {
             JointDrive _jointDrive = new JointDrive();

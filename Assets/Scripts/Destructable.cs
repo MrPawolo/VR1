@@ -59,10 +59,15 @@ public class Destructable : MonoBehaviour, IDamage
             float healthDivision = maxHealth / LODcount;
             int actLOD = (int)Math.Floor(actHealth / healthDivision);
 
-            foreach (GameObject LOD in levelsOfDestroy)
+            for(int i = 0; i < levelsOfDestroy.Length; i++)
             {
-                LOD.SetActive(false);
+                if (i == actLOD) continue;
+                levelsOfDestroy[i].SetActive(false);
             }
+            //foreach (GameObject LOD in levelsOfDestroy)
+            //{
+            //    LOD.SetActive(false);
+            //}
             levelsOfDestroy[actLOD].SetActive(true);
         }
         else

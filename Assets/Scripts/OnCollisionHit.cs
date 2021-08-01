@@ -44,6 +44,7 @@ public class OnCollisionHit : MonoBehaviour
         AudioSource source = go.AddComponent<AudioSource>();
         source.clip = clip;
         source.volume = vol;
+        source.spatialBlend = 1;
         source.pitch = Random.Range(0.97f, 1.03f);
         source.Play();
         Destroy(go, clip.length);

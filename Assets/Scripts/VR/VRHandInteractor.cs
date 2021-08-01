@@ -92,6 +92,12 @@ namespace VR.Base
 
                 foreach (VRInteractableBase interactable in _hoveredObjects)
                 {
+                    if(interactable == null)
+                    {
+                        Debug.LogWarning("Hovered obj was deleted");
+                        HoveredObjects.Remove(interactable);
+                        return null;
+                    }
                     if (!interactable.Hoverable || (interactable.Grabbed && !interactable.Hoverable))
                     {
                         break;

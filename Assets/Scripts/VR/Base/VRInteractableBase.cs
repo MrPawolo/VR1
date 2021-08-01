@@ -152,7 +152,7 @@ namespace VR.Base
         {
             if (onCollision != null)
             {
-                onCollision.OnCollision(Mathf.SmoothStep(2,20, collision.relativeVelocity.magnitude), collision);
+                onCollision.OnCollision(MyFunctions.SmoothStep(0.5f,8, collision.relativeVelocity.magnitude), collision);
             }
             if (VRHandInteractors.Count == 0) { return; }
             if (myRb.isKinematic) {return; }
