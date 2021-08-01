@@ -19,6 +19,7 @@ public class Destructable : MonoBehaviour, IDamage
     bool destroyed;
     void Start()
     {
+        
         actHealth = maxHealth;
         if (isBuilding)
         {
@@ -26,18 +27,27 @@ public class Destructable : MonoBehaviour, IDamage
             meshRenderer.material.SetFloat(StaticConfig.CrackProggres, 0);
         }
     }
+    private void OnJointBreak(float breakForce)
+    {
+        ObjDestroy();
+        Destroy(gameObject,20f);
+    }
     public void Damage(float velocity, float mass)
     {
         if (destroyed) return;
         actHealth -= MyFunctions.CalculateDMG(velocity, mass);
         if (actHealth < 0)
         {
-            OnObjDestroy?.Invoke();
-            destroyed = true;
-            HighScoreManager.AddToHighScore(pointsForDestruction);
+            ObjDestroy();
             return;
         }
         HandleLevelOfDestroy();
+    }
+    void ObjDestroy()
+    {
+        OnObjDestroy?.Invoke();
+        destroyed = true;
+        HighScoreManager.AddToHighScore(pointsForDestruction);
     }
     void HandleLevelOfDestroy()
     {

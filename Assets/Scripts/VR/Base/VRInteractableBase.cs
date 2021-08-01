@@ -152,7 +152,7 @@ namespace VR.Base
                 interactor.Controller.SendHapticImpulse(0.1f, haptic);
                 if (onCollision)
                 {
-                    onCollision.OnCollision(haptic);
+                    onCollision.OnCollision(haptic,collision);
                 }
             }
         }
