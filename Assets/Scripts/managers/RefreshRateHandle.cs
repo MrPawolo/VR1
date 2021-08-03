@@ -2,17 +2,21 @@ using UnityEngine;
 using UnityEngine.XR;
 public class RefreshRateHandle : MonoBehaviour
 {
-    private void Awake()
+    private void Start()
+    {
+        SetRefreshRate();
+    }
+    public void SetRefreshRate()
     {
         float refreshRate = XRDevice.refreshRate;
         float timeStep;
-        if(refreshRate != 0)
+        if (refreshRate != 0)
         {
-            timeStep = 1 / refreshRate;
+            timeStep = 1f / refreshRate;
         }
         else
         {
-            timeStep = 1 / 90;
+            timeStep = 1f / 90f;
         }
         Time.fixedDeltaTime = timeStep;
         Debug.Log("Refresh rate was set to: " + refreshRate);
